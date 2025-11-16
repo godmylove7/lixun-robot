@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  lixun-robot:
+    build: .
+    container_name: lixun-robot
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+      - LLM_MODEL=${LLM_MODEL}
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
