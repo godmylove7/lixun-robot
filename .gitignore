@@ -1,0 +1,44 @@
+# 在 knowledge-robot 文件夹中创建 .gitignore 文件，内容如下：
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# 环境变量
+.env
+.env.local
+
+# 向量存储（如果不想上传大文件）
+data/vector_store/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 日志
+*.log
