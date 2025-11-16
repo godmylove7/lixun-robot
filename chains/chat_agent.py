@@ -275,4 +275,4 @@ class ChatAgent:
                 }
                 for doc in result["retrieved_docs"]
             ]
-        }
+        }"" 
