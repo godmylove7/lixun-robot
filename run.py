@@ -9,7 +9,8 @@ import importlib.util
 from typing import List, Dict, Any
 import logging
 import warnings
-
+import psutil
+import gc
 
 def setup_selective_logging():
     """设置选择性日志，只在初始化阶段显示日志"""
@@ -118,8 +119,7 @@ class DocumentLoader:
         self.chat_agent = None
 
     def load_all_documents(self):
-        """加载data/documents中的所有文档"""
-        # 在方法内部导入ChatAgent，确保所有依赖已加载
+        """加载data/documents中的所有文档，优化大文件处理"""
         from chains.chat_agent import ChatAgent
 
         documents_dir = "data/documents"
@@ -142,21 +142,32 @@ class DocumentLoader:
 
         print(f"📚 找到 {len(document_files)} 个文档文件:")
         for doc in document_files:
-            print(f"   - {doc}")
+            file_path = os.path.join(documents_dir, doc)
+            file_size = os.path.getsize(file_path) / 1024 / 1024
+            print(f"   - {doc} ({file_size:.1f}MB)")
 
         all_documents = []
         total_chunks = 0
+
+        # 按文件大小排序，先处理小文件
+        document_files.sort(key=lambda x: os.path.getsize(os.path.join(documents_dir, x)))
 
         # 处理每个文档
         for filename in document_files:
             try:
                 file_path = os.path.join(documents_dir, filename)
-                file_ext = os.path.splitext(filename)[1].lower()[1:]  # 去掉点号
+                file_ext = os.path.splitext(filename)[1].lower()[1:]
+                file_size = os.path.getsize(file_path) / 1024 / 1024
 
-                print(f"🔍 处理文档: {filename}")
+                print(f"\n🔍 处理文档: {filename} ({file_size:.1f}MB)")
+
+                # 显示内存使用情况
+                memory_usage = psutil.Process().memory_info().rss / 1024 / 1024
+                print(f"   内存使用: {memory_usage:.1f}MB")
 
                 # 提取文本
                 text = self.document_processor.extract_text(file_path, file_ext)
+                print(f"   ✅ 文本提取完成，长度: {len(text)} 字符")
 
                 # 分割文档
                 documents = self.document_processor.split_documents(text, {
@@ -166,7 +177,13 @@ class DocumentLoader:
 
                 all_documents.extend(documents)
                 total_chunks += len(documents)
-                print(f"   ✅ 成功处理，分割为 {len(documents)} 个片段")
+                print(f"   ✅ 分割完成，{len(documents)} 个片段")
+
+                # 处理完大文件后强制垃圾回收
+                if file_size > 50:
+                    gc.collect()
+                    memory_after = psutil.Process().memory_info().rss / 1024 / 1024
+                    print(f"   🗑️  垃圾回收后内存: {memory_after:.1f}MB")
 
             except Exception as e:
                 print(f"   ❌ 处理失败: {e}")
@@ -176,10 +193,28 @@ class DocumentLoader:
             print("❌ 所有文档处理失败")
             return False
 
-        # 创建向量存储
-        print(f"\n📊 创建向量索引...")
-        self.vector_store.create_vector_store(all_documents)
-        self.vector_store.save_vector_store("data/vector_store")
+        # 创建向量存储 - 添加重试机制
+        max_retries = 3
+        retry_count = 0
+
+        while retry_count < max_retries:
+            try:
+                print(f"\n📊 创建向量索引... (尝试 {retry_count + 1}/{max_retries})")
+                self.vector_store.create_vector_store(all_documents)
+                self.vector_store.save_vector_store("data/vector_store")
+                break  # 成功则跳出循环
+
+            except Exception as e:
+                retry_count += 1
+                print(f"❌ 第{retry_count}次向量化失败: {e}")
+
+                if retry_count < max_retries:
+                    print("🔄 10秒后重试...")
+                    import time
+                    time.sleep(10)
+                else:
+                    print("❌ 所有重试尝试均失败")
+                    return False
 
         # 初始化聊天代理
         self.chat_agent = ChatAgent(self.vector_store, self.conversation_manager)

@@ -134,7 +134,7 @@ class ChatAgent:
             "question": state.question
         })
 
-        print(f"🔍 LLM原始响应: {full_response}")  # 调试用
+        # print(f"🔍 LLM原始响应: {full_response}")  # 调试用
 
         # 分离回答和实际引用内容
         answer, actual_citations = self._parse_response(full_response)
@@ -275,4 +275,4 @@ class ChatAgent:
                 }
                 for doc in result["retrieved_docs"]
             ]
-        }"" 
+        }

@@ -1,0 +1,24 @@
+[33me7a4d30[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to e7a4d30
+[33md13e118[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: commit: 更新聊天工作流模块
+[33maa73967[m[33m ([m[1;32mfeature/simple-commits[m[33m)[m HEAD@{2}: merge feature/simple-commits: Fast-forward
+[33md17e93d[m[33m ([m[1;32mfeature/restructure-commits[m[33m)[m HEAD@{3}: checkout: moving from feature/simple-commits to main
+[33maa73967[m[33m ([m[1;32mfeature/simple-commits[m[33m)[m HEAD@{4}: commit: 启动机器人
+[33m4bf7a3a[m HEAD@{5}: commit: 项目文档说明
+[33m3de70a8[m HEAD@{6}: commit: 项目依赖配置
+[33meb41aa9[m HEAD@{7}: commit: 存放提交文档
+[33mef1dbde[m HEAD@{8}: commit: 核心功能模块
+[33md131ea9[m HEAD@{9}: commit: 聊天工作流实现
+[33md17e93d[m[33m ([m[1;32mfeature/restructure-commits[m[33m)[m HEAD@{10}: checkout: moving from main to feature/simple-commits
+[33md17e93d[m[33m ([m[1;32mfeature/restructure-commits[m[33m)[m HEAD@{11}: merge feature/restructure-commits: Fast-forward
+[33m59fba57[m HEAD@{12}: checkout: moving from feature/restructure-commits to main
+[33md17e93d[m[33m ([m[1;32mfeature/restructure-commits[m[33m)[m HEAD@{13}: commit: feat: 实现命令行界面
+[33m56d1656[m HEAD@{14}: commit: docs: 添加项目文档
+[33m904fc53[m HEAD@{15}: commit: build: 配置项目依赖
+[33mab9715c[m HEAD@{16}: commit: docs: 添加示例文档集
+[33m4d885ea[m HEAD@{17}: commit: feat: 添加核心组件模块
+[33md9c295e[m HEAD@{18}: commit: feat: 实现聊天代理工作流
+[33m59fba57[m HEAD@{19}: checkout: moving from main to feature/restructure-commits
+[33m59fba57[m HEAD@{20}: commit (amend): feat: 实现知识库问答机器人核心功能
+[33mba753a4[m HEAD@{21}: commit (amend): feat: 完成第一阶段核心功能
+[33m32fa69c[m HEAD@{22}: Branch: renamed refs/heads/master to refs/heads/main
+[33m32fa69c[m HEAD@{24}: commit (initial): feat: 完成第一阶段核心功能 - 实现基于知识库的智能问答 - 支持PDF、Word、Markdown、TXT四种格式 - 使用FAISS向量检索 - 集成通义千问LLM - 完整的对话管理功能
